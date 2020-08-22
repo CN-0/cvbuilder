@@ -28,7 +28,8 @@ const Form = props =>{
         }        
         props.history.push({
             pathname: '/cv',
-            data
+            data,
+            template: props.location.template
         });
     }
     const addSkill = () =>{
@@ -48,8 +49,8 @@ const Form = props =>{
     return(     
     <form onSubmit={submitted} className="form">
         <h1 className="main-heading" style={{marginBottom:"15px",textAlign:"center", fontSize:"23px"}}>Enter Your Details to make a Resume</h1>
-        <div style={{display:"flex", justifyContent:"space-between"}}>
-            <div  style={{display: "flex",width:"400px",marginRight:"50px", flexShrink:"0",flexDirection:"column"}}>
+        <div className="form-container">
+            <div  className="sidebar-form-container">
                 <input type="text" id="name" placeholder="Name" />
                 <input type="text" id="position" placeholder="Position" />
                 <input type="email" id="email" placeholder="Email" />
@@ -60,7 +61,7 @@ const Form = props =>{
                 <input type="text" id="timeline" placeholder="timeline" />
                 <input type="text" id="pointer" placeholder="pointer" />
                 <div className="skill-form">
-                <input type="text" id="skill" value={skill} onChange={e=>setSkill(e.target.value)} placeholder="Enter the skill to be added" />
+                <input type="text" id="skill" className="skill-inp" value={skill} onChange={e=>setSkill(e.target.value)} placeholder="Enter the skill to be added" />
                 <button type="button" className="skill-btn" onClick={addSkill}>Add</button>
                 </div>
                 <ul className="skills-entered">
@@ -69,12 +70,12 @@ const Form = props =>{
             </div>
             <div style={{display: "flex", flexGrow:"1",flexDirection:"column"}}>
                 <div style={{marginTop:"10px"}}>
-                <textarea id="objective" type="text" placeholder="career objective" />
+                <textarea id="objective"  type="text" placeholder="career objective" />
                 </div>        
                 <div className="add-experiences">
                     <h1 style={{marginTop:"15px",marginBottom:"-2px"}}>Add Experience</h1>
                     <div style={{display:"flex", alignItems:"center"}}>
-                    <input type="text" id="exp-position" value={expPosition} onChange={e=>setExpPosition(e.target.value)} placeholder="position" />
+                    <input type="text" id="exp-position" className="inline-inp" value={expPosition} onChange={e=>setExpPosition(e.target.value)} placeholder="position" />
                     <button type="button"  onClick={addExperience} > Add</button>
                     </div>
                     <textarea type="text" id="exp-description" value={expDescription} onChange={e=>setExpDescrription(e.target.value)} placeholder="description" />
@@ -85,7 +86,7 @@ const Form = props =>{
                 <div className="add-projects">
                     <h1 style={{marginTop:"15px",marginBottom:"-2px"}}>Add Project</h1>
                     <div style={{display:"flex",alignItems:"center"}}>
-                    <input type="text" id="project-title" value={projectTitle} onChange={e=>setProjectTitle(e.target.value)} placeholder="title" />
+                    <input type="text" id="project-title" className="inline-inp" value={projectTitle} onChange={e=>setProjectTitle(e.target.value)} placeholder="title" />
                     <button type="button"  onClick={addProject} > Add</button>
                     </div>
                     <textarea type="text" id="project-description" value={projectDescription} onChange={e=>setProjectDescrription(e.target.value)} placeholder="description" />

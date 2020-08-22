@@ -8,12 +8,15 @@ import { FaFileDownload } from "react-icons/fa";
 
 const Cv = props =>{
     const [data, setData] = useState(props.location.data)
+    const [template, setTemplate] = useState(props.location.template)
+    console.log(template)
     useEffect(()=>{
         if(data){
-            localStorage.setItem('mycv',JSON.stringify(data));
+            localStorage.setItem('mycv',JSON.stringify({data,template}));
         }else{
             const item = JSON.parse(localStorage.getItem('mycv'));
-            setData(item);
+            setData(item.data);
+            setTemplate(item.template)
         }
     },[data])
     const printPDF = () => {
@@ -44,13 +47,13 @@ const Cv = props =>{
     };
     return(
     <div>
-    <div style={{display:"flex",justifyContent: "space-between" ,alignItems:"center"}}>
+    <div style={{display:"flex",justifyContent: "space-between" ,alignItems:"center", margin:"20px 0px 20px 0px"}}>
         <Link className="link-home" to="/">Create a new Cv</Link>
         <FaFileDownload  className="fadownload" onClick={printPDF} />
     </div>
     <div className="cv" id="cv">
-        {data?<Main data={data} />:null}
-        {data?<Sidebar data={data} />:null}
+        {data&&template===1?<><Main template={template} data={data} /><Sidebar data={data} /></>:null} 
+        {data&&template===2?<><Sidebar template={template} data={data} /><Main data={data} /></>:null} 
     </div>
     </div>)
 }

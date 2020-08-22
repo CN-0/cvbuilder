@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Main = ({data}) =>{
+const Main = ({data, template}) =>{
     const defaultObjective = "To succeed in an environment of growth and excellence and earn a job which provides job satisfaction, self-development and help me achieve personal as well as organizational goals"
     return(
-    <div className="main">
+    <div className={template===1?"main marginleft":"main"}>
         <div className="objective">
             <h2 className="main-heading">Career Objective</h2>
             <p className="description">{data.objective || defaultObjective}</p>
