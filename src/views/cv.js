@@ -1,61 +1,51 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from '../components/sidebar/sidebar';
 import Main from '../components/main/main';
-import html2canvas from 'html2canvas';
-import JsPdf from 'jspdf';
 import { Link } from 'react-router-dom';
-import { FaFileDownload } from "react-icons/fa";
 
 const Cv = props =>{
     const [data, setData] = useState(props.location.data)
     const [template, setTemplate] = useState(props.location.template)
-    console.log(template)
+
     useEffect(()=>{
         if(data){
-            localStorage.setItem('mycv',JSON.stringify({data,template}));
+            if(template){
+                localStorage.setItem('mycv',JSON.stringify({data,template}));
+            }else{
+                const item = JSON.parse(localStorage.getItem('mycv'));
+                setTemplate(item.template)
+                localStorage.setItem('mycv',JSON.stringify({data,template}));
+            }
         }else{
             const item = JSON.parse(localStorage.getItem('mycv'));
             setData(item.data);
             setTemplate(item.template)
         }
-    },[data])
-    const printPDF = () => {
-        const page = document.getElementById('cv');
-        html2canvas(page)
-          .then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-      
-            const imgWidth = 210;
-            const pageHeight = 298;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-      
-            const doc = new JsPdf('p', 'mm');
-            let position = 0;
-      
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-      
-            while (heightLeft >= 0) {
-              position = heightLeft - imgHeight;
-              doc.addPage();
-              doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-              heightLeft -= pageHeight;
-            }
-            doc.save('Resume.pdf');
-          });
-    };
-    return(
-    <div>
-    <div style={{display:"flex",justifyContent: "space-between" ,alignItems:"center", margin:"20px 0px 20px 0px"}}>
+    },[data,template])
+
+    const maindiv = data&&template===1?<><Main template={template} data={data} /><Sidebar data={data} /></>:null 
+    const sidebardiv = data&&template===2?<><Sidebar template={template} data={data} /><Main data={data} /></>:null
+
+    return(<>
+    <div className="print">
+        {maindiv}
+        {sidebardiv} 
+    </div>
+    <div className="print-no">
+    <div className="actions">
         <Link className="link-home" to="/">Create a new Cv</Link>
-        <FaFileDownload  className="fadownload" onClick={printPDF} />
+        <button className="btn draw-border"  onClick={()=>window.print()}>
+            <svg className="down-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+            </svg>Download PDF
+        </button>
     </div>
-    <div className="cv" id="cv">
-        {data&&template===1?<><Main template={template} data={data} /><Sidebar data={data} /></>:null} 
-        {data&&template===2?<><Sidebar template={template} data={data} /><Main data={data} /></>:null} 
+    <div className="cv">
+        {maindiv}
+        {sidebardiv}
     </div>
-    </div>)
+    </div>
+    </>)
 }
 
 export default Cv
